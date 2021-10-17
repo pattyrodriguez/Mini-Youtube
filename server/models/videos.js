@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const videosSchema = new Schema({
-    filename: {
+    fileName: {
         type: String,
         required: true,
     },
@@ -12,10 +12,6 @@ const videosSchema = new Schema({
         required: true
     },
     fileType:{
-        type: String,
-        required: true,
-    },
-    title: {
         type: String,
         required: true,
     },

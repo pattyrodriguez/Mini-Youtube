@@ -7,30 +7,47 @@ const fileUpload = async (req, res, next) => {
             fileName: req.file.originalname,
             filePath: req.file.path,
             fileType: req.file.mimetype,
-            title: req.title,
-            tags: req.tags,
-
+            tags: req.tags
         });
+        console.log(file)
         await file.save();
         res.status(201).send('File Uploaded Successfully');
+
     }catch(error) {
         res.status(400).send(error.message);
     }
 }
 
 const getallFiles = async (req, res, next) => {
-    console.log("ujuuuuum")
     try{
         const files = await Videos.find();
         res.status(200).send(files);
+        
     }catch(error) {
+        res.status(400).send(error.message);
+    } 
+}
+
+const fileDownload = async (req, res, next) => {
+    try {
+
+        const file = await Videos.findById(req.params.id).exec();
+        const fileDowload = process.cwd() + `${file.filePath}`;
+        
+        if (fileDowload.match("Error") ){
+            res.status(200).send('File Download Successfully').download(fileDowload);
+        } else {
+            res.status(400).send('There are problems downloading the file');
+        }
+        
+    } catch (error) {
         res.status(400).send(error.message);
     }
 }
 
 const updateLikes  = async (req, res, next) => {
     try{
-        const updateFile = await videos.findOneAndUpdate(
+        const updateFile = await Videos.findOneAndUpdate(
             {
                 _id: req.params.id,
             }, { 
@@ -46,5 +63,6 @@ const updateLikes  = async (req, res, next) => {
 module.exports = {
     fileUpload,
     getallFiles,
+    fileDownload,
     updateLikes
 }
